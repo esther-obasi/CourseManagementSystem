@@ -23,33 +23,21 @@ class Course{
 private:
 //data members
     int dept_id;
-    int course_id;
+    float course_id;
     string course_name;
     string course_schedule;
     double course_price;
 public:
 //constructors
     Course();
-    Course(int dept, int course, const string& name, const string& schedule, double price);
+    Course(int dept, float course, const string& name, const string& schedule, double price);
     ~Course(); //destructor
 //member functions
     string GetCourseName() const;
     string GetCourseSchedule() const;
     double GetCoursePrice() const;
     int GetDeptId() const;
-    int GetCourseId() const;
+    float GetCourseId() const;
 };
 
-class Cart{
-private:
-//data members
-    Course course; 
-public:
-//constructors
-    Cart();
-    Cart(Course& item);
-    ~Cart(); //destructor
-//member functions
-    double CalculateTotalPrice();
-};
 #endif //UTILITY_H

@@ -3,9 +3,14 @@
 #include "utility.h"
 #include <string>
 using namespace std;
+extern Department* StoreDepartments;
+extern Course* StoreCourses;
+extern Course* StoreCart;
 
 const int MAX_MENU = 7;
-
+extern int TotalDepartments;
+extern int TotalCourses;
+extern int CartCount;
 class Interface{
 private:
 //data members
@@ -24,6 +29,8 @@ public:
     string toLower(const string& str);
     string toUpper(const string& str);
     void DisplayContent();
+    void ListDepartments();
+    void ListCourses(int id, int type);
     void ExitProgram();
 };
 class AdminInterface : public Interface{
@@ -37,22 +44,21 @@ public:
     void RunMenu() override;
     void AddDepartment();
     void AddCourse();
-    void ListDepartments();
-    void ListCourses(int id, int cols);
     void SaveToCSV();
 };
 class StudentInterface : public Interface{
 private:
     static const string student_menu[MAX_MENU];
     static const string cart_menu[MAX_MENU];
+    static const string dept_menu[MAX_MENU];
+    static const string course_menu[MAX_MENU];
 public:
 //constructor
     StudentInterface();
     ~StudentInterface(); //destructor
 //member functions
     void RunMenu() override;
-    void AddToCart();
-    void RemoveFromCart();
+    void AddToCart(int dept);
     void ClearCart();
     void Checkout();
 };

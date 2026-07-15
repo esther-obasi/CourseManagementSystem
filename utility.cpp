@@ -19,7 +19,7 @@ Course::Course() {
     course_schedule = "";
     course_price = 0.0;
 }
-Course::Course(int dept, int course, const string& name, const string& schedule, double price) {
+Course::Course(int dept, float course, const string& name, const string& schedule, double price) {
     dept_id = dept;
     course_id = course;
     course_name = name;
@@ -38,7 +38,7 @@ double Course::GetCoursePrice() const {
 int Course::GetDeptId() const {
     return dept_id;
 }
-int Course::GetCourseId() const {
+float Course::GetCourseId() const {
     return course_id;
 }
 string Department::GetDepartmentName() const {

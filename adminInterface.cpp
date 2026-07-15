@@ -5,13 +5,7 @@
 #include <string>
 #include "ctype.h"
 using namespace std;
-
-Department* StoreDepartments = nullptr;
-Course* StoreCourses = nullptr;
-
-int TotalDepartments = 0;
-const char* csvFile = "Your/Path/To/CSVFile.csv";
-
+const char* csvFile = "/workspaces/CourseManagementSystem/admin.csv";
 const string AdminInterface::admin_menu[MAX_MENU] = {
     "\n===== ADMIN PORTAL =====",
     "\nList Departments [1]",
@@ -26,13 +20,6 @@ AdminInterface::AdminInterface(){
 }
 void AdminInterface::RunMenu() {
     int choice;
-    if (StoreDepartments == nullptr) {
-        StoreDepartments = new Department[MAX_ENTRIES];
-    }
-    if (StoreCourses == nullptr) {
-        StoreCourses = new Course[MAX_ENTRIES];
-    }
-    
     while (true) {
         SetList(admin_menu, size(admin_menu));
         DisplayContent();
@@ -61,38 +48,6 @@ void AdminInterface::RunMenu() {
             std::cout << "\nInvalid choice. Please enter 1, 2, 3, 4, or 5." << endl;
             cin.clear();
             cin.ignore(10000, '\n');
-        }
-    }
-}
-void AdminInterface::ListDepartments() {
-    if (TotalDepartments == 0) {
-        cout << "\nNo departments available. Please add a department." << endl;
-    } else {
-        cout << "\n===== DEPARTMENTS =====" << endl;
-        for (int i = 0; i < TotalDepartments; i++) {
-            cout << "[" << i + 1 << "] " << StoreDepartments[i].Department::GetDepartmentName() << endl;
-        }
-    }
-}
-void AdminInterface::ListCourses(int id, int type) {
-    int count = StoreDepartments[id - 1].Department::GetCourseCount();
-    if (count == 0) {
-        std::cout << "\nNo courses available in this department." << endl;
-    } else {
-        switch (type) {
-        case 1:
-            std::cout << "\n===== COURSES IN " << toUpper(StoreDepartments[id - 1].GetDepartmentName()) << " =====" << endl;
-            for (int i = 0; i < StoreDepartments[id - 1].GetCourseCount(); i++) {
-                std::cout << "[" << StoreCourses[i].GetCourseId() << "] " << StoreCourses[i].GetCourseName() << endl;
-            }
-            break;
-        case 2:
-            std::cout << "\n===== DETAILS =====" << endl;
-            for (int i = 0; i < StoreDepartments[id - 1].GetCourseCount(); i++) {
-                std::cout << "[" << StoreCourses[i].GetCourseId() << "] " << StoreCourses[i].GetCourseName() 
-                    << " - $" << StoreCourses[i].GetCoursePrice() << endl;
-            }
-            break;
         }
     }
 }
@@ -172,6 +127,7 @@ void AdminInterface::AddCourse(){
 
         StoreCourses[count] = Course(dept, course, name, schedule, price);
         StoreDepartments[dept - 1].SetCourseCount(count + 1);
+        TotalCourses++;
         cout << "\nCourse '" << name << "' added successfully." << endl;
     } else if (count >= MAX_ENTRIES) {
         cout << "\nCannot add more courses. Maximum limit reached." << endl;
@@ -183,25 +139,24 @@ void AdminInterface::SaveToCSV(){
         cout << "\nError opening file for writing." << endl;
         return;
     }
-    // Write departments
-    for (int i = 0; i < TotalDepartments; i++) {
-        outFile << "Department," << StoreDepartments[i].GetDepartmentName() << endl;
-    }
-    // Write courses
+    outFile << "Total Departments: " << TotalDepartments << endl;
+    // Write departments with respectivecourses
     for (int i = 0; i < TotalDepartments; i++) {
         int courseCount = StoreDepartments[i].GetCourseCount();
+        outFile << "Department " << i + 1 << " " 
+            << StoreDepartments[i].GetDepartmentName() 
+            << ", Total Courses In Department: " << courseCount << endl;
+        
         for (int j = 0; j < courseCount; j++) {
-        outFile << "Course," 
-                << StoreCourses[j].GetDeptId() + 1 << "," // Department number
+            outFile << "Course " 
+                << StoreCourses[j].GetCourseId() << " " // Department number
                 << StoreCourses[j].GetCourseName() << ","
                 << StoreCourses[j].GetCourseSchedule() << ","
                 << StoreCourses[j].GetCoursePrice() << endl;
         }
     }
     outFile.close();
-    cout << "\nData saved to CSV successfully." << endl;
+    cout << "\nData saved to CSV file successfully." << endl;
 }
 AdminInterface::~AdminInterface(){
-    delete[] StoreDepartments;
-    delete[] StoreCourses;
 }

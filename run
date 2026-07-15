@@ -1,0 +1,7 @@
+#!/bin/bash
+clear
+if g++ -o cms main.cpp interface.cpp adminInterface.cpp studentInterface.cpp utility.cpp; then
+    ./cms
+else
+    echo "Compilation failed."
+fi

@@ -59,13 +59,18 @@ void StudentInterface::AddToCart(int dept){
                 cin.ignore(10000, '\n');
                 continue;
             } else {
+                bool courseFound = false;
                 for (int i = 0; i < TotalCourses; i++) {
-                    if (StoreCourses[i].GetCourseId() == courseChoice) {
+                    if (StoreCourses[i].GetDeptId() == dept && StoreCourses[i].GetCourseId() == courseChoice) {
                         StoreCart[CartCount] = StoreCourses[i];
                         CartCount++;
+                        courseFound = true;
                         std::cout << "\nCourse added to cart." << endl;
-                        continue; //go back to course menu
+                        break;
                     }
+                }
+                if (!courseFound) {
+                    std::cout << "\nCourse code not included." << endl;
                 }
             }
         }else if (choice == 2) { //back to browse departments menu
